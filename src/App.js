@@ -1,35 +1,22 @@
-import Directory from "./Components/Directory/Directory.component";
+import { Routes, Route } from "react-router-dom";
+import Navigation from "./Components/Routes/navigation/navigation.component";
+import SignIn from "./Components/Routes/sign-in/sign-in.component";
+import Home from "./Components/Routes/home/home.component";
 
-const categories = [
-  {
-    id: 1,
-    title: "Hats",
-    imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-  },
-  {
-    id: 2,
-    title: "Jackets",
-    imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-  },
-  {
-    id: 3,
-    title: "Sneakers",
-    imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-  },
-  {
-    id: 4,
-    title: "Women",
-    imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
-  },
-  {
-    id: 5,
-    title: "Men",
-    imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-  },
-];
+const Shop = () => {
+  return <h1>I am the Tammy Brown </h1>;
+};
 
 const App = () => {
-  return <Directory categories={categories} />;
+  return (
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="sign-in" element={<SignIn />} />
+      </Route>
+    </Routes>
+  );
 };
 
 export default App;
