@@ -4,16 +4,16 @@ import {
 } from "../../../utils/firebase/firebase.utils";
 import SignUpForm from "../../SignUpForm/SignUpForm.component";
 import SignInForm from "../../SignInForm/SignInForm.component";
-import "./Authentication.styles.scss";
+import { AuthenticationContainer }from "./Authentication.styles";
 
 
 
 const Authentication = () => {
   return (
-    <div className="authentication-container">
+    <AuthenticationContainer>
       <SignInForm />
       <SignUpForm />
-    </div>
+    </AuthenticationContainer>
   );
 };
 export default Authentication;
