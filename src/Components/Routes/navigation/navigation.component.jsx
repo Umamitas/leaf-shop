@@ -30,10 +30,10 @@ const Navigation = () => {
             <Link className="nav-link" to="/auth">
               SIGN IN
             </Link>
-          )} 
+          )}
           <CartIcon />
         </div>
-        {isCartOpen && <CartDropDown />} 
+        {isCartOpen && <CartDropDown />}
       </div>
       <Outlet />
     </Fragment>

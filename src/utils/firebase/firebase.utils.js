@@ -9,7 +9,16 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection, //similmente a getRef ci permette di ottenere una collezione dall'array
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBGOp99pZPzTz1Q3nQr0lbmyikSIJZqXn0",
@@ -22,8 +31,8 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 
+//##############################--- AUTHENTICATION ---#####################################
 const googleProvider = new GoogleAuthProvider();
-
 googleProvider.setCustomParameters({
   prompt: "select_account",
 });
@@ -36,6 +45,40 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore(); //ci permette di entrare nel database
 /*controlla se c'è un riferimento già esistente */
+
+//############################--- UPLOADING DATAS ON FIREBASE ---#################################
+export const addColletionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  field
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db); //così come per collectionRef come prima argomento passiamo il nostro database
+
+  objectsToAdd.forEach((object) => {
+    //per ognuno di questi elementi, batchalo e dividilo in scarpe, cappelli donne, uomo
+    const docRef = doc(collectionRef, object.title.toLowerCase()); // collectionRef dice quale database stiamo usando
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+};
+
+//###############---UPLOADING DATAS FROM FIREBASE & MAP THEM---#####################
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q); //fetcha i documenti che vogliamo (q) in uno snapshop che vogliamo
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
+
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}
